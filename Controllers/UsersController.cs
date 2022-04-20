@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using PhamacyOn.Models;
+using PharmacyOn.Models;
 using PharmacyOn.Data;
 
 namespace PharmacyOn.Controllers
@@ -33,7 +33,7 @@ namespace PharmacyOn.Controllers
             if (data.Count == 1)
             {
                 ViewBag.Message += string.Format("Logged in successfully<br />");
-                return RedirectToAction("Index", "Blog");
+                return RedirectToAction("Main", "Home");
             }
             else
             {
@@ -74,12 +74,15 @@ namespace PharmacyOn.Controllers
                     Password = model.Password,
                     Weight = model.Weight,
                     Height = model.Height,
-                    BloodGroup = model.BloodGroup
+                    BloodGroup = model.BloodGroup,
+                    Allergies = model.Allergies,
+                    MedicalConditions = model.MedicalConditions
+                  
                 };
                 _context.Users.Add(account);
                 _context.SaveChanges();
                 ViewBag.Message += string.Format("Registered Successfuly!<br />");
-                return RedirectToAction("Index", "Blog");
+                return RedirectToAction("Main", "Home");
             }
         }
     }

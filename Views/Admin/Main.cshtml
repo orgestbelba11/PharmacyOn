@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewData["Title"] = "Main";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1>Admin</h1>
+<div class="site-block-cover-content text-center">
+    <h2>Choose one option below</h2><br />
+    <p>
+        <a asp-area="" asp-controller="Admin" asp-action="Index" class="btn btn-primary px-5 py-3">Products</a>
+        <a asp-area="" asp-controller="Orders" asp-action="Index" class="btn btn-primary px-5 py-3">Orders</a>
+        <a asp-area="" asp-controller="Home" asp-action="Main" class="btn btn-primary px-5 py-3">Insights</a>
+    </p>
+</div>

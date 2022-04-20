@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PhamacyOn
+namespace PharmacyOn
 {
     public class Program
     {

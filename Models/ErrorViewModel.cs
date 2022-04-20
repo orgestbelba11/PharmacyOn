@@ -1,6 +1,6 @@
 using System;
 
-namespace PhamacyOn.Models
+namespace PharmacyOn.Models
 {
     public class ErrorViewModel
     {

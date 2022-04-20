@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PhamacyOn.Models
+namespace PharmacyOn.Models
 {
     public class Order
     {
@@ -13,9 +13,13 @@ namespace PhamacyOn.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Required]
+        public int UserID { get; set; }  
+        [Required]
         public string ProductName { get; set; }
         [Required]
         public string Status { get; set; }
+        [Required]
+        public string PhotoPath { get; set; }
         [Required]
         public string PrescriptionPhotoPath { get; set; }
         [Required]

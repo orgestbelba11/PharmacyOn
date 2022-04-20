@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PhamacyOn.Models
+namespace PharmacyOn.Models
 {
     public class Product
     {

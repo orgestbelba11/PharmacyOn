@@ -1,10 +1,11 @@
-﻿@model PhamacyOn.Models.User
+﻿@model PharmacyOn.Models.User
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "SignUp";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<h1>SignUp</h1>
 
 <h4>User</h4>
 <hr />
@@ -68,7 +69,17 @@
                 <span asp-validation-for="BloodGroup" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Sign Up" class="btn btn-primary" />
+                <label asp-for="Allergies" class="control-label"></label>
+                <input asp-for="Allergies" class="form-control" />
+                <span asp-validation-for="Allergies" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MedicalConditions" class="control-label"></label>
+                <input asp-for="MedicalConditions" class="form-control" />
+                <span asp-validation-for="MedicalConditions" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -78,6 +89,3 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using PhamacyOn.Models;
+using PharmacyOn.Data;
+using PharmacyOn.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,13 +14,29 @@ namespace PhamacyOn.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _context;
 
+        public HomeController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
 
         public IActionResult Main()
+        {
+            var data = _context.Products.ToList();
+            return View(data);
+        }
+
+        public IActionResult ShoppingCart()
+        {
+            return View();
+        }
+
+        public IActionResult Menu()
         {
             return View();
         }

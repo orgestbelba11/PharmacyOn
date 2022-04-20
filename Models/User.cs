@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PhamacyOn.Models
+namespace PharmacyOn.Models
 {
     public class User
     {
@@ -34,6 +34,10 @@ namespace PhamacyOn.Models
         public double Height { get; set; }
         [Required]
         public string BloodGroup { get; set; }
+        [Required]
+        public string Allergies { get; set; }
+        [Required]
+        public string MedicalConditions { get; set; }
         
         
     }
