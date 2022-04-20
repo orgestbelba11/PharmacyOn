@@ -16,12 +16,9 @@ namespace PhamacyOn.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
 
-        public HomeController(ApplicationDbContext context)
+        public HomeController(ApplicationDbContext context, ILogger<HomeController> logger)
         {
             _context = context;
-        }
-        public HomeController(ILogger<HomeController> logger)
-        {
             _logger = logger;
         }
 
