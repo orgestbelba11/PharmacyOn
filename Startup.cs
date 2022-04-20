@@ -65,7 +65,7 @@ namespace PhamacyOn
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Users}/{action=LogIn}/{id?}");
+                    pattern: "{controller=Home}/{action=Main}/{id?}");
             });
         }
     }
