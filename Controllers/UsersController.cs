@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PharmacyOn.Models;
 using PharmacyOn.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace PharmacyOn.Controllers
 {
@@ -33,6 +34,9 @@ namespace PharmacyOn.Controllers
             if (data.Count == 1)
             {
                 ViewBag.Message += string.Format("Logged in successfully<br />");
+
+                HttpContext.Session.SetString("UserID", data.FirstOrDefault().ID);
+
                 return RedirectToAction("Main", "Home");
             }
             else
@@ -66,7 +70,7 @@ namespace PharmacyOn.Controllers
 
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    Age = model.Age,
+                    Birthday = model.Birthday.Date,
                     PersonalID = model.PersonalID,
                     PhoneNumber = model.PhoneNumber,
                     Address = model.Address,
@@ -79,9 +83,13 @@ namespace PharmacyOn.Controllers
                     MedicalConditions = model.MedicalConditions
                   
                 };
+
                 _context.Users.Add(account);
                 _context.SaveChanges();
                 ViewBag.Message += string.Format("Registered Successfuly!<br />");
+
+                HttpContext.Session.SetString("UserID", model.ID);
+
                 return RedirectToAction("Main", "Home");
             }
         }

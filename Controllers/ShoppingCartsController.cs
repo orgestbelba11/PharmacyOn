@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using PharmacyOn.Data;
 using PharmacyOn.Models;
 
@@ -13,16 +15,66 @@ namespace PharmacyOn.Controllers
     public class ShoppingCartsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<ShoppingCartsController> _logger;
 
-        public ShoppingCartsController(ApplicationDbContext context)
+        public ShoppingCartsController(ApplicationDbContext context, ILogger<ShoppingCartsController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: ShoppingCarts
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.ShoppingCarts.ToListAsync());
+            var data = _context.ShoppingCarts.Where(s => s.UserID == HttpContext.Session.GetString("UserID")).ToList();
+
+            return View(data);
+        }
+
+        public IActionResult IncreaseQuantity(int? id)
+        {
+            var Item = _context.ShoppingCarts.Where(s => s.Id == id).ToList();
+
+            int quantity = Item.FirstOrDefault().Quantity++;
+
+            var Cart = new ShoppingCart
+            {
+
+                UserID = HttpContext.Session.GetString("UserID"),
+                ProductName = Item.FirstOrDefault().ProductName,
+                PhotoPath = Item.FirstOrDefault().PhotoPath,
+                Cost = Item.FirstOrDefault().Cost,
+                Quantity = quantity,
+                TotalPrice = Item.FirstOrDefault().Cost * quantity
+
+            };
+
+            _context.Entry(Cart).State = EntityState.Modified;
+            _context.SaveChanges();
+            return RedirectToAction("Index", "ShoppingCarts");
+        }
+
+        public IActionResult DecreaseQuantity(int? id)
+        {
+            var Item = _context.ShoppingCarts.Where(s => s.Id == id).ToList();
+
+            int quantity = Item.FirstOrDefault().Quantity--;
+
+            var Cart = new ShoppingCart
+            {
+
+                UserID = HttpContext.Session.GetString("UserID"),
+                ProductName = Item.FirstOrDefault().ProductName,
+                PhotoPath = Item.FirstOrDefault().PhotoPath,
+                Cost = Item.FirstOrDefault().Cost,
+                Quantity = quantity,
+                TotalPrice = Item.FirstOrDefault().Cost * quantity
+
+            };
+
+            _context.Entry(Cart).State = EntityState.Modified;
+            _context.SaveChanges();
+            return RedirectToAction("Index", "ShoppingCarts");
         }
 
         // GET: ShoppingCarts/Details/5

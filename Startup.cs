@@ -55,6 +55,9 @@ namespace PharmacyOn
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
+
+            app.UseSession();
+
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -65,7 +68,7 @@ namespace PharmacyOn
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Main}/{id?}");
+                    pattern: "{controller=Users}/{action=LogIn}/{id?}");
             });
         }
     }

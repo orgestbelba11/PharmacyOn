@@ -41,7 +41,7 @@
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td>
-                        <img src="@Url.Content(item.ImagePath)" alt="Image">
+                        <img src="@Url.Content(item.ImagePath)" class="img-fluid w-20 mb-1" alt="Image">
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Description)
@@ -54,8 +54,8 @@
                     </td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-outline-primary px-3 py-1">Edit</a><br />
-                        <a asp-action="Details" asp-route-id="@item.ID" class="btn btn-outline-primary px-2 py-0.5">Details</a><br />
-                        <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-outline-primary px-2 py-0.5">Delete</a><br />
+                        <a asp-action="Details" asp-route-id="@item.ID" class="btn btn-outline-primary px-3 py-1">Details</a><br />
+                        <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-outline-primary px-3 py-1">Delete</a><br />
                     </td>
                 </tr>
             }

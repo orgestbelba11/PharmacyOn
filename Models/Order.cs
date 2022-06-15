@@ -13,18 +13,23 @@ namespace PharmacyOn.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Required]
-        public int UserID { get; set; }  
+        public string UserID { get; set; }  
         [Required]
         public string ProductName { get; set; }
         [Required]
         public string Status { get; set; }
         [Required]
         public string PhotoPath { get; set; }
-        [Required]
+
         public string PrescriptionPhotoPath { get; set; }
+
         [Required]
         public string Address { get; set; }
         [Required]
         public double TotalPrice { get; set; }
+        [Required]
+        public DateTime Date { get; set; }
+        [Required]
+        public string Quantity { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PharmacyOn.Data;
@@ -28,14 +29,41 @@ namespace PhamacyOn.Controllers
             return View(data);
         }
 
-        public IActionResult ShoppingCart()
+        public IActionResult ShopSingle(int id)
+        {
+            var data = _context.Products.Where(s => s.ID == id).ToList();
+            return View(data);
+        }
+
+        public IActionResult AddToCart(int id)
+        {
+            var Item = _context.Products.Where(s => s.ID == id).ToList();
+            
+            var Cart = new ShoppingCart
+            {
+
+                UserID = HttpContext.Session.GetString("UserID"),
+                ProductName = Item.FirstOrDefault().Name,
+                PhotoPath = Item.FirstOrDefault().ImagePath,
+                Cost = Item.FirstOrDefault().Price,
+                Quantity = 1,
+                TotalPrice = Item.FirstOrDefault().Price
+
+            };
+            _context.ShoppingCarts.Add(Cart);
+            _context.SaveChanges();
+            return RedirectToAction("ShopSingle", "Home", new { id });
+        }
+
+        public IActionResult Checkout()
         {
             return View();
         }
 
         public IActionResult Menu()
         {
-            return View();
+            var data = _context.Products.ToList();
+            return View(data);
         }
 
         public IActionResult Privacy()
