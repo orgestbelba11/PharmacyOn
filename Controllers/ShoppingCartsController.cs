@@ -33,48 +33,44 @@ namespace PharmacyOn.Controllers
 
         public IActionResult IncreaseQuantity(int? id)
         {
-            var Item = _context.ShoppingCarts.Where(s => s.Id == id).ToList();
+            var Item = _context.ShoppingCarts.Where(s => s.Id == id).FirstOrDefault();
 
-            int quantity = Item.FirstOrDefault().Quantity++;
+            int quantity = Item.Quantity + 1;
 
-            var Cart = new ShoppingCart
+            if(Item != null)
             {
+                Item.Quantity = quantity;
+                Item.TotalPrice = Item.Cost * quantity;
+            }
 
-                UserID = HttpContext.Session.GetString("UserID"),
-                ProductName = Item.FirstOrDefault().ProductName,
-                PhotoPath = Item.FirstOrDefault().PhotoPath,
-                Cost = Item.FirstOrDefault().Cost,
-                Quantity = quantity,
-                TotalPrice = Item.FirstOrDefault().Cost * quantity
-
-            };
-
-            _context.Entry(Cart).State = EntityState.Modified;
+            _context.Entry(Item).State = EntityState.Modified;
             _context.SaveChanges();
             return RedirectToAction("Index", "ShoppingCarts");
         }
 
         public IActionResult DecreaseQuantity(int? id)
         {
-            var Item = _context.ShoppingCarts.Where(s => s.Id == id).ToList();
+            var Item = _context.ShoppingCarts.Where(s => s.Id == id).FirstOrDefault();
 
-            int quantity = Item.FirstOrDefault().Quantity--;
+            int quantity = Item.Quantity - 1;
 
-            var Cart = new ShoppingCart
+            if (quantity < 1)
             {
+                return RedirectToAction("Index", "ShoppingCarts");
+            }
+            else
+            {
+                if (Item != null)
+                {
+                    Item.Quantity = quantity;
+                    Item.TotalPrice = Item.Cost * quantity;
+                }
+                _context.Entry(Item).State = EntityState.Modified;
+                _context.SaveChanges();
+                return RedirectToAction("Index", "ShoppingCarts");
+            }
 
-                UserID = HttpContext.Session.GetString("UserID"),
-                ProductName = Item.FirstOrDefault().ProductName,
-                PhotoPath = Item.FirstOrDefault().PhotoPath,
-                Cost = Item.FirstOrDefault().Cost,
-                Quantity = quantity,
-                TotalPrice = Item.FirstOrDefault().Cost * quantity
-
-            };
-
-            _context.Entry(Cart).State = EntityState.Modified;
-            _context.SaveChanges();
-            return RedirectToAction("Index", "ShoppingCarts");
+            
         }
 
         // GET: ShoppingCarts/Details/5

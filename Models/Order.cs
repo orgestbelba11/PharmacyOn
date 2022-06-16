@@ -20,9 +20,7 @@ namespace PharmacyOn.Models
         public string Status { get; set; }
         [Required]
         public string PhotoPath { get; set; }
-
         public string PrescriptionPhotoPath { get; set; }
-
         [Required]
         public string Address { get; set; }
         [Required]

@@ -7,6 +7,7 @@ using PharmacyOn.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -57,13 +58,51 @@ namespace PhamacyOn.Controllers
 
         public IActionResult Checkout()
         {
-            return View();
+            var shoppingCart = _context.ShoppingCarts.Where(s => s.UserID == HttpContext.Session.GetString("UserID")).ToList();
+            var user = _context.Users.Where(s => s.ID == HttpContext.Session.GetString("UserID")).ToList();
+            dynamic multiplemodels = new ExpandoObject();
+            multiplemodels.shoppingCart = shoppingCart;
+            multiplemodels.user = user;
+
+            return View(multiplemodels);
         }
 
         public IActionResult Menu()
         {
             var data = _context.Products.ToList();
             return View(data);
+        }
+
+        public IActionResult OrderCompleted()
+        {
+            var cart = _context.ShoppingCarts.Where(s => s.UserID == HttpContext.Session.GetString("UserID")).ToList();
+            var userInfo = _context.Users.Where(s => s.ID == HttpContext.Session.GetString("UserID")).ToList();
+
+            string productsName = "";
+            string totalPrices = "";
+            string quantities = "";
+            string photoPaths = "";
+
+            foreach(var data in cart)
+            {
+                productsName += (";" + data.ProductName);
+                photoPaths += (";" + data.PhotoPath);
+                totalPrices += (";" + data.TotalPrice);
+                quantities += (";" + data.Quantity);   
+            }
+            var order = new Order
+            {
+                UserID = cart.FirstOrDefault().UserID,
+                ProductName = productsName,
+                Status = "Pending",
+                PhotoPath = photoPaths,
+                PrescriptionPhotoPath = "",
+                Address = userInfo.FirstOrDefault().Address,
+                TotalPrice = totalPrices,
+                Date = DateTime.Now,
+
+            };
+            return View();
         }
 
         public IActionResult Privacy()
