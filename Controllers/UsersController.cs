@@ -120,7 +120,7 @@ namespace PharmacyOn.Controllers
             }
             _context.Entry(order).State = EntityState.Modified;
             _context.SaveChanges();
-            return RedirectToAction("Index", "Orders");
+            return RedirectToAction("MyOrders", "Users");
         }
     }
 }
