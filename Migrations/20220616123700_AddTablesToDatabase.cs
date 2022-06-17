@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PharmacyOn.Migrations
 {
@@ -19,9 +18,10 @@ namespace PharmacyOn.Migrations
                     PhotoPath = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PrescriptionPhotoPath = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TotalPrice = table.Column<double>(type: "float", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Quantity = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    TotalPrice = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Date = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Quantity = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Prescription = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -70,7 +70,8 @@ namespace PharmacyOn.Migrations
                     ID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Birthday = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Birthday = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PersonalID = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),

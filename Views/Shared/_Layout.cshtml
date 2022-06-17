@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http;
+<!DOCTYPE html>
+
 
 <html>
 <head>
@@ -58,12 +60,19 @@
 
                                 </ul>
                             </li>
-                            <li><a href="about.html">About</a></li>
-                            <li><a href="contact.html">Contact</a></li>
+                            <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
+                            @{ 
+                                if(Context.Session.GetString("UserID") != null)
+                                {
+                                <li><a asp-controller="Users" asp-action="MyOrders">My Orders</a></li>
+                                }
+                            }
+                            
                         </ul>
                     </nav>
                 </div>
                 <div class="icons">
+
                     <a href="#" class="icons-btn d-inline-block js-search-open"><span class="icon-search"></span></a>
                     <a asp-area="" asp-controller="ShoppingCarts" asp-action="Index" class="icons-btn d-inline-block bag">
                         <span class="icon-shopping-bag"></span>
@@ -73,6 +82,12 @@
                         <span class="icon-menu"></span>
                     </a>
                 </div>
+                @{
+                    if (Context.Session.GetString("UserID") != null)
+                    {
+                        <p><a class="btn btn-outline-warning" asp-controller="Users" asp-action="LogOut">Log Out</a></p>
+                    }
+                }
             </div>
         </div>
     </div>

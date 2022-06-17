@@ -13,7 +13,7 @@ namespace PharmacyOn.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Required]
-        public string UserID { get; set; }  
+        public string UserID { get; set; }
         [Required]
         public string ProductName { get; set; }
         [Required]
@@ -24,10 +24,12 @@ namespace PharmacyOn.Models
         [Required]
         public string Address { get; set; }
         [Required]
-        public double TotalPrice { get; set; }
+        public string TotalPrice { get; set; }
         [Required]
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
         [Required]
         public string Quantity { get; set; }
+        [Required]
+        public Boolean Prescription{get;set;}
     }
 }

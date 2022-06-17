@@ -1,0 +1,134 @@
+﻿@model IEnumerable<PharmacyOn.Models.Order>
+
+@{
+    ViewData["Title"] = "MyOrders";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>MyOrders</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Order ID
+            </th>
+            <th>
+                Products
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+                Prescription Picture
+            </th>
+            <th>
+                Address
+            </th>
+            <th>
+                Total
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Date
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Id
+                </td>
+                @{
+                    string[] products = item.ProductName.Split(';');
+                    string[] quantities = item.Quantity.Split(';');
+                }
+                <td>
+                    @foreach (var product in products)
+                    {
+                        if (product == "")
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            <p>@product </p>
+                        }
+                    }
+                </td>
+                <td>
+                    @foreach (var quantity in quantities)
+                    {
+                        if (quantity == "")
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            <p><strong>X</strong> @quantity</p>
+                        }
+                    }
+                </td>
+                @{
+                    if (item.PrescriptionPhotoPath == "")
+                    {
+                        <td>
+                            Prescription not needed.
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <img src="@Url.Content(item.PrescriptionPhotoPath)" alt="Image" class="img-fluid">
+                        </td>
+                    }
+                }
+                <td>
+                    @item.Address
+                </td>
+                @{
+                    string[] prices = item.TotalPrice.Split(';');
+                    double counter = 0;
+                }
+                @foreach (var price in prices)
+                {
+                    if (price == "")
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        double total = Convert.ToDouble(@price);
+                        counter += total;
+                    }
+                }
+                <td>
+                    <p>$@counter</p>
+                </td>
+                <td>
+                    @item.Status
+                </td>
+                <td>
+                    @item.Date
+                </td>
+                <td>
+                    @{
+                        if (item.Status == "Confirmed by the shop")
+                        {
+                            <a type="submit" class="btn btn-success" asp-controller="Users" asp-action="ConfirmRecieved" asp-route-id="@item.Id">Confirm Recieved</a>
+                        }
+                        if(item.Status == "Pending")
+                        {
+                            <a type="submit" class="btn btn-danger" asp-controller="Orders" asp-action="Delete" asp-route-id="@item.Id">Cancel Order</a>
+                        }        
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

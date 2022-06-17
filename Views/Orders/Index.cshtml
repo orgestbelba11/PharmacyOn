@@ -5,34 +5,37 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>All Orders</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.UserID)
+                Order ID
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProductName)
+                User ID
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+                Products
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PhotoPath)
+                Quantity
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PrescriptionPhotoPath)
+                Prescription
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Address)
+                Address
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TotalPrice)
+                Price
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Date
             </th>
             <th></th>
         </tr>
@@ -41,30 +44,90 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.UserID)
+                @item.Id
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProductName)
+                @item.UserID
+            </td>
+            @{
+                string[] products = item.ProductName.Split(';');
+                string[] quantities = item.Quantity.Split(';');
+            }
+        <td>
+            @foreach (var product in products)
+            {
+                if (product == "")
+                {
+                    continue;
+                }
+                else
+                {
+                    <p>@product </p>
+                }
+            }
+        </td>
+        <td>
+            @foreach (var quantity in quantities)
+            {
+                if (quantity == "")
+                {
+                    continue;
+                }
+                else
+                {
+                    <p><strong>X</strong> @quantity</p> 
+                }
+            }
+        </td>
+            @{
+                if (item.PrescriptionPhotoPath == "")
+                {
+                    <td>
+                        Prescription not needed.
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <img src="@Url.Content(item.PrescriptionPhotoPath)" alt="Image" class="img-fluid">
+                    </td>
+                }
+            }
+            <td>
+                @item.Address
+            </td>
+            @{
+                string[] prices = item.TotalPrice.Split(';');
+                double counter = 0;
+            }
+            @foreach (var price in prices)
+             {
+                if (price == "")
+                {
+                    continue;
+                }
+                else
+                {
+                    double total = Convert.ToDouble(@price);
+                    counter += total;
+                }
+             }
+            <td>
+                <p>$@counter</p>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Status)
+                @item.Status
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PhotoPath)
+                @item.Date
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PrescriptionPhotoPath)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalPrice)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @{
+                    if (item.Status == "Pending")
+                    {
+                        <a type="submit" class="btn btn-success" asp-controller="Admin" asp-action="ConfirmOrder" asp-route-id="@item.Id">Confirm Order</a>
+                    }
+                }
             </td>
         </tr>
 }

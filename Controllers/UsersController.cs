@@ -52,7 +52,6 @@ namespace PharmacyOn.Controllers
             return View(model);
         }
 
-        //HttpPost action to check if a user is already register and if not, to save the new user at database.
         [HttpPost]
         public IActionResult SignUp(User model)
         {
@@ -70,7 +69,8 @@ namespace PharmacyOn.Controllers
 
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    Birthday = model.Birthday.Date,
+                    Username = model.Username,
+                    Birthday = model.Birthday.ToString(),
                     PersonalID = model.PersonalID,
                     PhoneNumber = model.PhoneNumber,
                     Address = model.Address,
@@ -88,10 +88,39 @@ namespace PharmacyOn.Controllers
                 _context.SaveChanges();
                 ViewBag.Message += string.Format("Registered Successfuly!<br />");
 
-                HttpContext.Session.SetString("UserID", model.ID);
+                return RedirectToAction("LogIn", "Users");
+            }      
+        }
 
-                return RedirectToAction("Main", "Home");
+        public IActionResult LogOut()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("LogIn", "Users");
+        }
+
+        public IActionResult MyOrders()
+        {
+            if (HttpContext.Session.GetString("UserID") != null)
+            {
+                var data = _context.Orders.Where(s => s.UserID == HttpContext.Session.GetString("UserID")).ToList();
+                return View(data);
             }
+            else
+            {
+                return RedirectToAction("LogIn", "Users");
+            }         
+        }
+
+        public IActionResult ConfirmRecieved(int? id)
+        {
+            var order = _context.Orders.Where(s => s.Id == id).FirstOrDefault();
+            if (order != null)
+            {
+                order.Status = "Delivered";
+            }
+            _context.Entry(order).State = EntityState.Modified;
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Orders");
         }
     }
 }

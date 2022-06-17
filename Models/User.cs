@@ -17,7 +17,9 @@ namespace PharmacyOn.Models
         [Required]
         public string LastName { get; set; }
         [Required]
-        public DateTime Birthday { get; set; }
+        public string Username { get; set; }
+        [Required]
+        public string Birthday { get; set; }
         [Required]
         public string PersonalID { get; set; }
         [Required]

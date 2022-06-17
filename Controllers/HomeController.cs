@@ -10,6 +10,8 @@ using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace PhamacyOn.Controllers
 {
@@ -17,11 +19,15 @@ namespace PhamacyOn.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
+        [Obsolete]
+        private readonly IHostingEnvironment Environment;
 
-        public HomeController(ApplicationDbContext context, ILogger<HomeController> logger)
+        public HomeController(ApplicationDbContext context, ILogger<HomeController> logger, IHostingEnvironment _environment)
         {
+
             _context = context;
             _logger = logger;
+            Environment = _environment;
         }
 
         public IActionResult Main()
@@ -73,8 +79,25 @@ namespace PhamacyOn.Controllers
             return View(data);
         }
 
-        public IActionResult OrderCompleted()
+        [HttpPost]
+        [Obsolete]
+        public IActionResult CheckOut(IFormFile postedFiles)
         {
+            string prescriptionPhoto = "";
+
+            if (postedFiles != null)
+            {
+                string wwwPath = this.Environment.WebRootPath;
+                string contentPath = this.Environment.ContentRootPath;
+                string path = Path.Combine(this.Environment.WebRootPath, "images");
+
+                string fileName = Path.GetFileName(postedFiles.FileName);
+                using (FileStream stream = new(Path.Combine(path, fileName), FileMode.Create))
+                    postedFiles.CopyTo(stream);
+                ViewBag.Message += string.Format("<b>{0}</b> uploaded.<br />", fileName);
+                prescriptionPhoto = Path.Combine("~/images/", fileName);
+            }
+
             var cart = _context.ShoppingCarts.Where(s => s.UserID == HttpContext.Session.GetString("UserID")).ToList();
             var userInfo = _context.Users.Where(s => s.ID == HttpContext.Session.GetString("UserID")).ToList();
 
@@ -96,15 +119,39 @@ namespace PhamacyOn.Controllers
                 ProductName = productsName,
                 Status = "Pending",
                 PhotoPath = photoPaths,
-                PrescriptionPhotoPath = "",
+                PrescriptionPhotoPath = prescriptionPhoto,
                 Address = userInfo.FirstOrDefault().Address,
                 TotalPrice = totalPrices,
-                Date = DateTime.Now,
-
+                Date = DateTime.Now.ToString("dddd, dd MMMM yyyy"),
+                Quantity = quantities,
             };
+            _context.Add(order);
+            _context.SaveChanges();
+
+            return RedirectToAction("ClearCart","Home");
+        }
+
+        public async Task<IActionResult> ClearCart(int? id)
+        {
+            var items = _context.ShoppingCarts.Where(s => s.UserID == HttpContext.Session.GetString("UserID")).ToList();
+            foreach(var item in items)
+            {
+                var order = await _context.ShoppingCarts.FindAsync(item.Id);
+                _context.ShoppingCarts.Remove(order);
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction("ThankYou", "Home");
+        }
+
+        public IActionResult ThankYou()
+        {
             return View();
         }
 
+        public IActionResult Contact()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();

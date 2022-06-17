@@ -91,18 +91,17 @@ namespace PharmacyOn.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("ID,Name,Description,Price,Prescription")] Product product)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(product);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(product);
-        //}
+        public IActionResult ConfirmOrder(int? id)
+        {
+            var order = _context.Orders.Where(s => s.Id == id).FirstOrDefault();
+            if(order != null)
+            {
+                order.Status = "Confirmed by the shop";
+            }
+            _context.Entry(order).State = EntityState.Modified;
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Orders");
+        }
 
         // GET: Admin/Edit/5
         public async Task<IActionResult> Edit(int? id)
